@@ -1,0 +1,14 @@
+{
+  "name": "reward-logger",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node logger.js"
+  },
+  "dependencies": {
+    "dotenv": "^6.0.0",
+    "dsteem": "^0.10.1",
+    "moment": "^2.22.2",
+    "mysql": "^2.15.0"
+  }
+}
