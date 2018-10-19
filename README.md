@@ -67,7 +67,3 @@ How to contribute?
 
 Any contribution is welcome, I believe no code is perfect and can always be improved. Feel free to make pull requests, just make sure to fit to the coding style : 4 space indent and snake_case 
 
-I hope to bring you guys some more news about this project soon :) 
-
-@howo out. 
-
