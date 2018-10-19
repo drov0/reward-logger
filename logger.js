@@ -3,7 +3,7 @@ const moment = require("moment");
 
 const dsteem = require('dsteem');
 const client = new dsteem.Client('https://api.steemit.com');
-const db = require("./mysql");
+const db = require("./mysql").db_promise;
 
 async function get_last_op_id(username)
 {
@@ -63,6 +63,8 @@ async function parse_opts(username)
                     author_sbd : 0,
                     author_sp : 0,
                     author_steem : 0,
+                    unix : timestamp.unix(),
+                    username : username
                 }
 
             }
@@ -108,11 +110,17 @@ async function get_rewards()
     {
         const day = earnings[key];
 
-        db("INSERT INTO ")
+        const exist = await db("SELECT 1 from revenue_data WHERE username = ? AND date = ?", [day.username, day.unix]);
+
+        if (exist.length !== 0)
+        {
+            await db("UPDATE `revenue_data` SET `benefs_sbd` = ? , `benefs_sp` = ?, `benefs_steem` = ?, `curation_rewards` = ? , `producer_reward` = ?, `author_sbd` = ? , `author_sp` = ?, `author_steem` = ? WHERE `username` = ? AND `date` = ?",
+                [day.benefs_sbd, day.benefs_sp, day.benefs_steem, day.curation_rewards, day.producer_reward, day.author_sbd, day.author_sp, day.author_steem, day.username, day.unix])
+        } else
+            await db("INSERT INTO `revenue_data` (`username`, `date`, `benefs_sbd`, `benefs_sp`, `benefs_steem`, `curation_rewards`, `producer_reward`, `author_sbd`, `author_sp`, `author_steem`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                [day.username, day.unix, day.benefs_sbd, day.benefs_sp, day.benefs_steem, day.curation_rewards, day.producer_reward, day.author_sbd, day.author_sp, day.author_steem])
 
     }
-
-    console.log(earnings);
 }
 
 
