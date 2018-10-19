@@ -67,7 +67,6 @@ async function parse_opts(username)
                     unix : timestamp.unix(),
                     username : username
                 }
-
             }
 
             const op = data[i][1].op;
@@ -106,9 +105,29 @@ async function parse_opts(username)
 async function get_rewards()
 {
 
+
+
+    let earnings_data =[];
+
     for (let i = 0; i < accounts.length; i++) {
         console.log("getting the reward history from "+ accounts[i]);
-        let earnings = await  parse_opts(accounts[i]);
+        earnings_data.push(await  parse_opts(accounts[i]));
+        console.log("done");
+    }
+
+    for (let i = 0; i < earnings_data.length; i++)
+    {
+        for (let key in earnings_data[i]) {
+            for (let k = 0; k < earnings_data.length; k++) {
+                if (earnings_data[k][key] === undefined)
+                    delete earnings_data[i][key];
+            }
+        }
+    }
+
+    for (let i = 0; i < earnings_data.length; i++) {
+
+        const earnings = earnings_data[i];
 
         for (let key in earnings) {
             const day = earnings[key];
@@ -123,9 +142,8 @@ async function get_rewards()
                     [day.username, day.unix, day.benefs_sbd, day.benefs_sp, day.benefs_steem, day.curation_rewards, day.producer_reward, day.author_sbd, day.author_sp, day.author_steem])
 
         }
-
-        console.log("done");
     }
+
 }
 
 
