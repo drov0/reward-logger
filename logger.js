@@ -4,6 +4,7 @@ const moment = require("moment");
 const dsteem = require('dsteem');
 const client = new dsteem.Client('https://api.steemit.com');
 const db = require("./mysql").db_promise;
+const accounts = require("./config");
 
 async function get_last_op_id(username)
 {
@@ -104,22 +105,26 @@ async function parse_opts(username)
 
 async function get_rewards()
 {
-    let earnings = await  parse_opts("steempress");
 
-    for (let key in earnings)
-    {
-        const day = earnings[key];
+    for (let i = 0; i < accounts.length; i++) {
+        console.log("getting the reward history from "+ accounts[i]);
+        let earnings = await  parse_opts(accounts[i]);
 
-        const exist = await db("SELECT 1 from revenue_data WHERE username = ? AND date = ?", [day.username, day.unix]);
+        for (let key in earnings) {
+            const day = earnings[key];
 
-        if (exist.length !== 0)
-        {
-            await db("UPDATE `revenue_data` SET `benefs_sbd` = ? , `benefs_sp` = ?, `benefs_steem` = ?, `curation_rewards` = ? , `producer_reward` = ?, `author_sbd` = ? , `author_sp` = ?, `author_steem` = ? WHERE `username` = ? AND `date` = ?",
-                [day.benefs_sbd, day.benefs_sp, day.benefs_steem, day.curation_rewards, day.producer_reward, day.author_sbd, day.author_sp, day.author_steem, day.username, day.unix])
-        } else
-            await db("INSERT INTO `revenue_data` (`username`, `date`, `benefs_sbd`, `benefs_sp`, `benefs_steem`, `curation_rewards`, `producer_reward`, `author_sbd`, `author_sp`, `author_steem`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                [day.username, day.unix, day.benefs_sbd, day.benefs_sp, day.benefs_steem, day.curation_rewards, day.producer_reward, day.author_sbd, day.author_sp, day.author_steem])
+            const exist = await db("SELECT 1 from revenue_data WHERE username = ? AND date = ?", [day.username, day.unix]);
 
+            if (exist.length !== 0) {
+                await db("UPDATE `revenue_data` SET `benefs_sbd` = ? , `benefs_sp` = ?, `benefs_steem` = ?, `curation_rewards` = ? , `producer_reward` = ?, `author_sbd` = ? , `author_sp` = ?, `author_steem` = ? WHERE `username` = ? AND `date` = ?",
+                    [day.benefs_sbd, day.benefs_sp, day.benefs_steem, day.curation_rewards, day.producer_reward, day.author_sbd, day.author_sp, day.author_steem, day.username, day.unix])
+            } else
+                await db("INSERT INTO `revenue_data` (`username`, `date`, `benefs_sbd`, `benefs_sp`, `benefs_steem`, `curation_rewards`, `producer_reward`, `author_sbd`, `author_sp`, `author_steem`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    [day.username, day.unix, day.benefs_sbd, day.benefs_sp, day.benefs_steem, day.curation_rewards, day.producer_reward, day.author_sbd, day.author_sp, day.author_steem])
+
+        }
+
+        console.log("done");
     }
 }
 
