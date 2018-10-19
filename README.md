@@ -1,13 +1,3 @@
-<center> ![reward logger(1).png](https://cdn.steemitimages.com/DQmUzJwXsddQ26M1T1Z1XkrFkAgYEXKHwHDiWQLJuzjDrtj/reward%20logger(1).png)</center>
-
-## Repository
-
-https://github.com/drov0/reward-logger
-
-## Website
-
-https://github.com/drov0/reward-logger
-
 # Reward logger
 
 Reward logger is something that does exactly what its name implies : it logs rewards. When you are running a business on the steem blockchain (like @steempress) your revenues come from a lot of different channels, curation rewards, producer rewards, author rewards or even benefactor rewards for some cases. 
