@@ -22,7 +22,7 @@ function remove_unusable_ops(data)
 
         if (daysago !== 0)
         {
-            data.slice(data.length - i, i);
+            data.splice(0, i);
             return data;
         }
     }
