@@ -37,10 +37,9 @@ async function parse_opts(username)
         const total_vesting_fund_steem = chain_properties.total_vesting_fund_steem;
 
         const id = await get_last_op_id(username);
+        let ops = 10000;
         if (id < 10000)
-            const ops = id;
-        else
-            const ops = 10000;
+            ops = id;
 
         let data = await client.database.call("get_account_history", [username, id, ops]);
 
@@ -57,10 +56,13 @@ async function parse_opts(username)
             {
                 earnings[timestamp] = {
                     benefs_sbd : 0,
-                    curation_rewards : 0,
                     benefs_sp : 0,
                     benefs_steem : 0,
-                    producer_reward : 0
+                    curation_rewards : 0,
+                    producer_reward : 0,
+                    author_sbd : 0,
+                    author_sp : 0,
+                    author_steem : 0,
                 }
 
             }
@@ -84,6 +86,12 @@ async function parse_opts(username)
             {
                 earnings[timestamp].curation_rewards += parseFloat(parseFloat(total_vesting_fund_steem) *
                     (parseFloat(op[1].reward) / parseFloat(total_vesting_shares)),6);
+            } else if (op[0] === "author_reward")
+            {
+                earnings[timestamp].author_sbd += parseFloat(op[1].sbd_payout)
+                earnings[timestamp].author_steem += parseFloat(op[1].steem_payout)
+                earnings[timestamp].author_sp += parseFloat(parseFloat(total_vesting_fund_steem) *
+                    (parseFloat(op[1].vesting_payout) / parseFloat(total_vesting_shares)),6);
             }
         }
 
@@ -96,9 +104,15 @@ async function get_rewards()
 {
     let earnings = await  parse_opts("steempress");
 
+    for (let key in earnings)
+    {
+        const day = earnings[key];
+
+        db("INSERT INTO ")
+
+    }
+
     console.log(earnings);
-
-
 }
 
 
