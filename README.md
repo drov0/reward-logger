@@ -60,7 +60,7 @@ Technology Stack
 
 Roadmap
 
-- Optimize the number of operations that are picked, right now there is a lot of data that is recalculated for no reason and it's putting unnecessary strain on api.steemit.com 
+- Optimize the number of operations that are picked, right now there is a lot of data that is recalculated for no reason and it's putting unnecessary strain on anyx.io 
 - Build a dashboard on top to display the data.  
 
 How to contribute?

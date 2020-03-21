@@ -2,7 +2,7 @@ require('dotenv').config()
 const moment = require("moment");
 
 const dsteem = require('dsteem');
-const client = new dsteem.Client('https://api.steemit.com');
+const client = new dsteem.Client('https://anyx.io');
 const db = require("./mysql").db_promise;
 const accounts = require("./config");
 
